@@ -4,6 +4,6 @@ require_once('src/model/post.php');
 function homepage()
 {
     $postRepository = new PostRepository();
-    $posts = getPosts($postRepository);
+    $posts = $postRepository->getPosts();
     require('templates/homepage.php');
 }
