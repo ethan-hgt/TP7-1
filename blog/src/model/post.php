@@ -7,9 +7,14 @@ class Post
     public string $identifier;
 }
 
-function getPosts() {
-    $database = dbConnect();
-    $statement = $database->query(
+class PostRepository
+{
+    public ?PDO $database = null;
+}
+
+function getPosts(PostRepository $repository) {
+    dbConnect($repository);
+    $statement = $repository->database->query(
         "SELECT id, title, content, DATE_FORMAT(creation_date, '%d/%m/%Y à %Hh%imin%ss') AS french_creation_date FROM posts ORDER BY creation_date DESC LIMIT 0, 5"
     );
     $posts = [];
@@ -24,9 +29,9 @@ function getPosts() {
     return $posts;
 }
 
-function getPost($identifier) {
-    $database = dbConnect();
-    $statement = $database->prepare(
+function getPost(PostRepository $repository, string $identifier) {
+    dbConnect($repository);
+    $statement = $repository->database->prepare(
         "SELECT id, title, content, DATE_FORMAT(creation_date, '%d/%m/%Y à %Hh%imin%ss') AS french_creation_date FROM posts WHERE id = ?"
     );
     $statement->execute([$identifier]);
@@ -39,8 +44,9 @@ function getPost($identifier) {
     return $post;
 }
 
-function dbConnect()
+function dbConnect(PostRepository $repository)
 {
-    $database = new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'blog', 'password');
-    return $database;
+    if ($repository->database === null) {
+        $repository->database = new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'blog', 'password');
+    }
 }
