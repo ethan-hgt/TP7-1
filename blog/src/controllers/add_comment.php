@@ -2,6 +2,8 @@
 require_once('src/lib/database.php');
 require_once('src/model/comment.php');
 
+use Application\Model\Comment\CommentRepository;
+
 function addComment(string $post, array $input)
 {
     $author = null;
