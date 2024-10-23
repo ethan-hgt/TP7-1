@@ -28,7 +28,10 @@
 <?php
 foreach ($comments as $comment) {
 ?>
-    <p><strong><?= htmlspecialchars($comment->author) ?></strong> le <?= $comment->frenchCreationDate ?></p>
+    <p>
+        <strong><?= htmlspecialchars($comment->author) ?></strong> le <?= $comment->frenchCreationDate ?>
+        <em><a href="index.php?action=updateComment&id=<?= $comment->identifier ?>&post_id=<?= $post->identifier ?>">Modifier</a></em>
+    </p>
     <p><?= nl2br(htmlspecialchars($comment->comment)) ?></p>
 <?php
 }
